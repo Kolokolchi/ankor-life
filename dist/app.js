@@ -1,23 +1,19 @@
 'use strict';
 
 const PRODUCTS = {
-  renova: {name:'ankor RENOVA',price:33000,variant:'44137163817136',format:'60 капсул',image:'./assets/renova-editorial.jpg',alt:'Флаконы и капсулы Ankor RENOVA',tag:'Липофильный концентрат облепихи',description:'Основа RENOVA — ТОМ К-90®, липофильный концентрат облепихи. Он объединяет природные жирные кислоты, каротиноиды и полифенолы. Продукт разработан и производится в Казахстане.',composition:'Масло какао, твёрдое облепиховое масло (ТОМ К-90®). Оболочка капсулы: очищенная вода, крахмал тапиоки, глицерин.',url:'https://ankor.life/products/масло-облепихи-ankor-renova'},
-  detox: {name:'ankor DETOX',price:16000,variant:'44137795846320',format:'20 саше по 10 г',image:'./assets/detox-editorial.jpg',alt:'Упаковка и саше Ankor DETOX',tag:'Два растительных компонента',description:'Композиция обезжиренных плодов сибирской облепихи и крупноплодного шиповника из гор Кыргызстана. Порционный формат для приготовления напитка.',composition:'Обезжиренные плоды облепихи, плоды шиповника.',url:'https://ankor.life/products/энтеросорбент-ankor-detox'},
-  renovaPlus: {name:'ankor RENOVA+',price:40000,format:'60 капсул',image:'./assets/renova-plus.webp',alt:'Флакон Ankor RENOVA+ с оранжевой этикеткой и капсулы',portrait:true,tag:'Новый продукт · Облепиха',description:'Новый продукт линейки RENOVA на основе липофильного концентрата облепихи ТОМ К-90®. В стеклянном флаконе — 60 капсул.',compositionTitle:'Компоненты на этикетке',composition:'Омега-7, янтарная кислота, β-каротин, витамины E и K. Полный состав и сведения об оболочке капсулы указаны на упаковке.'},
-  nigella: {name:'ankor NIGELLA S.',price:38000,format:'90 капсул',image:'./assets/nigella-s.webp',alt:'Флакон Ankor NIGELLA S. с чёрно-белой этикеткой и капсулы',portrait:true,tag:'Новый продукт · Чёрный тмин',description:'Липофильный концентрат чёрного тмина в капсулах. Новый растительный комплекс Ankor в стеклянном флаконе на 90 капсул.',compositionTitle:'Компоненты на этикетке',composition:'Жирные кислоты омега-3, 6 и 9, тимохинон и катехин. Полный состав и сведения об оболочке капсулы указаны на упаковке.'}
+  renova: {name:'ankor RENOVA',price:41810,format:'60 капсул',image:'./assets/renova-editorial.jpg',alt:'Флаконы и капсулы Ankor RENOVA',tag:'Липофильный концентрат облепихи',description:'Основа RENOVA — ТОМ К-90®, липофильный концентрат облепихи. Он объединяет природные жирные кислоты, каротиноиды и полифенолы. Продукт разработан и производится в Казахстане.',composition:'Масло какао, твёрдое облепиховое масло (ТОМ К-90®). Оболочка капсулы: очищенная вода, крахмал тапиоки, глицерин.',url:'https://ankor.life/products/масло-облепихи-ankor-renova'},
+  detox: {name:'ankor DETOX',price:21470,format:'20 саше по 10 г',image:'./assets/detox-editorial.jpg',alt:'Упаковка и саше Ankor DETOX',tag:'Два растительных компонента',description:'Композиция обезжиренных плодов сибирской облепихи и крупноплодного шиповника из гор Кыргызстана. Порционный формат для приготовления напитка.',composition:'Обезжиренные плоды облепихи, плоды шиповника.',url:'https://ankor.life/products/энтеросорбент-ankor-detox'},
+  renovaPlus: {name:'ankor RENOVA+',price:41810,format:'60 капсул',image:'./assets/renova-plus.webp',alt:'Флакон Ankor RENOVA+ с оранжевой этикеткой и капсулы',portrait:true,tag:'Новый продукт · Облепиха',description:'Новый продукт линейки RENOVA на основе липофильного концентрата облепихи ТОМ К-90®. В стеклянном флаконе — 60 капсул.',compositionTitle:'Компоненты на этикетке',composition:'Омега-7, янтарная кислота, β-каротин, витамины E и K. Полный состав и сведения об оболочке капсулы указаны на упаковке.'},
+  nigella: {name:'ankor NIGELLA S.',price:54200,format:'90 капсул',image:'./assets/nigella-s.webp',alt:'Флакон Ankor NIGELLA S. с чёрно-белой этикеткой и капсулы',portrait:true,tag:'Новый продукт · Чёрный тмин',description:'Липофильный концентрат чёрного тмина в капсулах. Новый растительный комплекс Ankor в стеклянном флаконе на 90 капсул.',compositionTitle:'Компоненты на этикетке',composition:'Жирные кислоты омега-3, 6 и 9, тимохинон и катехин. Полный состав и сведения об оболочке капсулы указаны на упаковке.'}
 };
 const money = value => new Intl.NumberFormat('ru-KZ').format(value) + ' ₸';
 const icon = name => `<svg class="icon" aria-hidden="true"><use href="#i-${name}"/></svg>`;
 const whatsapp = message => 'https://wa.me/77715371627?text='+encodeURIComponent(message);
 function buildCheckout(items) {
   const entries=Object.entries(items).filter(([key,qty])=>Object.hasOwn(PRODUCTS,key)&&Number.isInteger(qty)&&qty>0);
-  const assisted=entries.some(([key])=>!PRODUCTS[key].variant);
   const total=entries.reduce((sum,[key,qty])=>sum+PRODUCTS[key].price*qty,0);
-  if(assisted){
-    const lines=entries.map(([key,qty])=>`${PRODUCTS[key].name} (${PRODUCTS[key].format}) — ${qty} шт. × ${money(PRODUCTS[key].price)} = ${money(PRODUCTS[key].price*qty)}`);
-    return {assisted,total,url:whatsapp(['Здравствуйте! Хочу оформить заказ Ankor:',...lines,`Итого: ${money(total)}. Доставка отдельно.`,`Подтвердите, пожалуйста, наличие и условия доставки.`].join('\n'))};
-  }
-  return {assisted,total,url:entries.length?'https://ankor.life/cart/'+entries.map(([key,qty])=>PRODUCTS[key].variant+':'+qty).join(','):'https://ankor.life/cart'};
+  const lines=entries.map(([key,qty])=>`${PRODUCTS[key].name} (${PRODUCTS[key].format}) — ${qty} шт. × ${money(PRODUCTS[key].price)} = ${money(PRODUCTS[key].price*qty)}`);
+  return {total,url:whatsapp(['Здравствуйте! Хочу оформить заказ Ankor:',...lines,`Итого: ${money(total)}. Доставка отдельно.`,`Подтвердите, пожалуйста, наличие и условия доставки.`].join('\n'))};
 }
 const cartKey = 'ankor-redesign-cart-v1';
 let cart = {};
@@ -53,10 +49,7 @@ function updateCart(){
   const order=buildCheckout(cart);
   const checkout=document.getElementById('checkout');
   checkout.href=order.url;
-  checkout.textContent=order.assisted?'Заказать в WhatsApp':'Перейти к оформлению';
-  if(order.assisted){checkout.target='_blank';checkout.rel='noopener';}else{checkout.removeAttribute('target');checkout.removeAttribute('rel');}
-  document.querySelector('.checkout-note').textContent=order.assisted?'Список товаров и сумма уже в сообщении. Отправьте его менеджеру.':'Продолжим в официальном магазине ankor.life';
-  document.getElementById('delivery-note').textContent=order.assisted?'Наличие, доставку и оплату подтвердит менеджер.':'Доставка рассчитывается при оформлении.';
+
   try{localStorage.setItem(cartKey,JSON.stringify(cart));}catch{/* Browsing with storage disabled still supports this session's cart. */}
 }
 function addProduct(key){
@@ -89,3 +82,44 @@ document.querySelectorAll('.faq-list details').forEach(detail=>detail.addEventLi
 window.addEventListener('storage',event=>{if(event.key!==cartKey)return;try{const next=JSON.parse(event.newValue||'{}');cart={};for(const key of Object.keys(PRODUCTS)){if(Number.isInteger(next?.[key])&&next[key]>0)cart[key]=Math.min(next[key],99);}updateCart();}catch{/* Ignore invalid data from another tab. */}});
 document.getElementById('year').textContent=new Date().getFullYear();
 updateCart();
+
+// One-time entrances enhance the story; content stays visible without animation support.
+function initializeMotion() {
+  if (!('IntersectionObserver' in window) || !Element.prototype.animate) return;
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const easing = getComputedStyle(document.documentElement).getPropertyValue('--ease-out').trim();
+  const active = new Map();
+  let keyboardInput = false;
+  const targets = document.querySelectorAll('.hero-content > .origin-label, .hero-content > h1, .hero-description, .hero-visual, .section-heading, .product-image, .nature-visual, .nature-content, .science-top, .timeline article, .lab-gallery figure, .questions-intro, .contact-banner');
+  const stopMotion = () => { active.forEach(animation => animation.cancel()); active.clear(); };
+  document.addEventListener('keydown', event => {
+    if (['Tab', 'Enter', ' ', 'Escape', 'ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', 'Home', 'End'].includes(event.key)) {
+      keyboardInput = true;
+      stopMotion();
+    }
+  });
+  document.addEventListener('pointerdown', () => { keyboardInput = false; }, {passive:true});
+  reduced.addEventListener('change', stopMotion);
+  const observer = new IntersectionObserver(entries => {
+    let sequence = 0;
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+      const target = entry.target;
+      observer.unobserve(target);
+      target.dataset.motion = 'shown';
+      if (keyboardInput || target.contains(document.activeElement)) continue;
+      const frames = reduced.matches
+        ? [{opacity:0}, {opacity:1}]
+        : [{opacity:0,transform:'translateY(16px)'}, {opacity:1,transform:'translateY(0)'}];
+      const animation = target.animate(frames, {
+        duration:reduced.matches ? 200 : 600,
+        delay:reduced.matches ? 0 : Math.min(sequence++, 3) * 50,
+        easing, fill:'backwards'
+      });
+      active.set(target, animation);
+      animation.finished.then(() => active.delete(target), () => active.delete(target));
+    }
+  }, {threshold:0.08,rootMargin:'0px 0px -24px 0px'});
+  targets.forEach(target => { target.dataset.motion = 'pending'; observer.observe(target); });
+}
+initializeMotion();

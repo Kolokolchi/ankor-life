@@ -82,3 +82,9 @@ Final prompt:
 Final prompt:
 
 > Use case: photorealistic-natural. Asset for premium natural supplements website Ankor, botanical editorial photograph. A sunlit macro closeup of fresh ripe orange sea buckthorn berries clustered on a thin woody branch with elegant narrow silvery olive-green leaves. Lush yet naturally imperfect foliage, tiny drops of dew, beautiful dappled natural light and deep forest green softly out-of-focus background. Branch enters from lower left diagonally toward upper right, richly tactile berries lit warm amber, shallow depth of field, exquisite film photography, medium format, high detail, sophisticated botanical science magazine. Portrait 4:5 composition. Realistic plant structure. No text, graphics, labels, human hands, borders or watermark.
+
+## Price and motion update, 2026-10-16
+
+The owner revised all prices: RENOVA 41,810 KZT, DETOX 21,470 KZT, RENOVA+ 41,810 KZT, NIGELLA S. 54,200 KZT. These supersede the earlier prices documented above. The official store still returned 33,000 / 16,000 KZT for its two variants during this update. All checkout messages now go to the existing WhatsApp sales contact so the requested price list carries through to ordering.
+
+The NIGELLA S. catalogue card now uses one bottle: `dist/assets/nigella-s-single.webp`, from `E:/Drive/Ankor/Фотографии/НИГЕЛЛА С/Каталог без названия7770.jpg`. The delivery copy only applies EXIF orientation, resizing and WebP encoding; CSS controls its framing and gently blends the empty background edges into the card. The earlier multi-bottle photograph is retained as an unused asset.
