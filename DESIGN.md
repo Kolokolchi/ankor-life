@@ -6,7 +6,7 @@ Palette: porcelain #FAFBF7, pine #263C32, muted leaf #6F7C62, sea buckthorn #D96
 
 Typography: locally hosted Manrope, 400–800, with deliberately open paragraph leading and tightly set display headlines. No decorative serif or science-fiction type.
 
-Layout: wide navigation, asymmetric two-column hero, four compact factual qualities, spacious product pair, ingredient story, research timeline, practical questions, and contact/footer. All content is left aligned except the hero's floating botanical annotation.
+Layout: wide navigation, asymmetric two-column hero, four compact factual qualities, four products in a spacious two-column grid, ingredient story, research timeline, laboratory photography, practical questions, and contact/footer. All content is left aligned except the hero's floating botanical annotation. New cards reuse the original typography, spacing, colors and interactions; the laboratory uses the same heading system and image corners.
 
 Desktop concept:
 ```
@@ -22,13 +22,17 @@ origin       ingredient        technology       format
 Products heading                     comparison link
 [RENOVA editorial image]        [DETOX editorial image]
 name / details / price           name / details / price
+[RENOVA+ photograph]            [NIGELLA S. photograph]
+name / details / price           name / details / price
 
 [macro botanical photograph]     ingredient narrative
                                  composition + process
 
 Research story + clear timeline in four columns
+Laboratory heading + short introduction
+[wide laboratory photograph]    [equipment detail]
 Questions with topic switching / contact action
 Large, quiet branded footer
 ```
 
-Review: retain actual Ankor identity and packaging. The light yellow comes from sunlit botanical photography, the orange from sea buckthorn, and green from existing packaging. Avoid repeated hero carousels, medicinal promises, generic review cards, decorative statistics and invented certifications. Real products, prices and contact details were checked on ankor.life on 2026-10-16. The design has a local cart; checkout continues at the existing Ankor shop. Generated photography is art direction, not new packaging.
+Review: retain actual Ankor identity and packaging. The light yellow comes from sunlit botanical photography, the orange from sea buckthorn, and green from existing packaging. Avoid repeated hero carousels, medicinal promises, generic review cards, decorative statistics and invented certifications. Original products and contacts were checked on ankor.life on 2026-10-16; the owner supplied the two new prices and product photographs. The local cart sends existing products to the Ankor shop and prepares WhatsApp orders when a new product is included. Generated hero photography is art direction; new product and laboratory photographs are the owner's originals. Both header and footer use the supplied July 2025 vector logo geometry, with the green symbol retained on light and dark backgrounds.
