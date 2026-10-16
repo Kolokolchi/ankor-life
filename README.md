@@ -2,6 +2,10 @@
 
 Готовая адаптивная версия главной страницы Ankor на чистом HTML, CSS и JavaScript. Сборка и установка зависимостей не нужны.
 
+Опубликованный сайт: https://kolokolchi.github.io/ankor-life/
+
+Репозиторий: https://github.com/Kolokolchi/ankor-life
+
 ## Запуск
 
 ```sh
@@ -32,3 +36,14 @@ npm run dev
 - `.openai/hosting.json` — конфигурация отдельной публикации Sites.
 
 Исходный сайт https://ankor.life/ не изменён. Перенос этого дизайна в Shopify требует интеграции разметки в тему магазина.
+
+## GitHub Pages
+
+Исходники хранятся в ветке `main`. GitHub Pages публикует содержимое `dist/` из ветки `gh-pages`. Для обновления после коммита:
+
+```sh
+git push origin main
+git subtree push --prefix dist origin gh-pages
+```
+
+Главная страница, изображения и шрифты используют относительные пути и работают в подпапке `/ankor-life/`.
