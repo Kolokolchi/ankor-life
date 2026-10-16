@@ -1,11 +1,24 @@
 'use strict';
 
 const PRODUCTS = {
-  renova: {name:'ankor RENOVA',price:33000,variant:'44137163817136',format:'60 капсул',image:'./assets/renova-editorial.jpg',alt:'Флаконы и капсулы Ankor RENOVA',tag:'Природный комплекс облепихи',description:'Твёрдое облепиховое масло в капсулах. Формула на основе природных компонентов, разработанная с применением технологии ТОМ К-90®.',composition:'Масло какао, твёрдое облепиховое масло. Оболочка капсулы: очищенная вода, крахмал тапиоки, глицерин.',url:'https://ankor.life/products/масло-облепихи-ankor-renova'},
-  detox: {name:'ankor DETOX',price:16000,variant:'44137795846320',format:'20 саше по 10 г',image:'./assets/detox-editorial.jpg',alt:'Упаковка и саше Ankor DETOX',tag:'Облепиха и шиповник',description:'Растительный продукт на основе облепихи и шиповника. Порционные саше удобно хранить и брать с собой.',composition:'Растительные компоненты облепихи и шиповника. Полный состав и рекомендации по применению указаны на упаковке и странице продукта.',url:'https://ankor.life/products/энтеросорбент-ankor-detox'}
+  renova: {name:'ankor RENOVA',price:33000,variant:'44137163817136',format:'60 капсул',image:'./assets/renova-editorial.jpg',alt:'Флаконы и капсулы Ankor RENOVA',tag:'Липофильный концентрат облепихи',description:'Основа RENOVA — ТОМ К-90®, липофильный концентрат облепихи. Он объединяет природные жирные кислоты, каротиноиды и полифенолы. Продукт разработан и производится в Казахстане.',composition:'Масло какао, твёрдое облепиховое масло (ТОМ К-90®). Оболочка капсулы: очищенная вода, крахмал тапиоки, глицерин.',url:'https://ankor.life/products/масло-облепихи-ankor-renova'},
+  detox: {name:'ankor DETOX',price:16000,variant:'44137795846320',format:'20 саше по 10 г',image:'./assets/detox-editorial.jpg',alt:'Упаковка и саше Ankor DETOX',tag:'Два растительных компонента',description:'Композиция обезжиренных плодов сибирской облепихи и крупноплодного шиповника из гор Кыргызстана. Порционный формат для приготовления напитка.',composition:'Обезжиренные плоды облепихи, плоды шиповника.',url:'https://ankor.life/products/энтеросорбент-ankor-detox'},
+  renovaPlus: {name:'ankor RENOVA+',price:40000,format:'60 капсул',image:'./assets/renova-plus.webp',alt:'Флакон Ankor RENOVA+ с оранжевой этикеткой и капсулы',portrait:true,tag:'Новый продукт · Облепиха',description:'Новый продукт линейки RENOVA на основе липофильного концентрата облепихи ТОМ К-90®. В стеклянном флаконе — 60 капсул.',compositionTitle:'Компоненты на этикетке',composition:'Омега-7, янтарная кислота, β-каротин, витамины E и K. Полный состав и сведения об оболочке капсулы указаны на упаковке.'},
+  nigella: {name:'ankor NIGELLA S.',price:38000,format:'90 капсул',image:'./assets/nigella-s.webp',alt:'Флакон Ankor NIGELLA S. с чёрно-белой этикеткой и капсулы',portrait:true,tag:'Новый продукт · Чёрный тмин',description:'Липофильный концентрат чёрного тмина в капсулах. Новый растительный комплекс Ankor в стеклянном флаконе на 90 капсул.',compositionTitle:'Компоненты на этикетке',composition:'Жирные кислоты омега-3, 6 и 9, тимохинон и катехин. Полный состав и сведения об оболочке капсулы указаны на упаковке.'}
 };
 const money = value => new Intl.NumberFormat('ru-KZ').format(value) + ' ₸';
 const icon = name => `<svg class="icon" aria-hidden="true"><use href="#i-${name}"/></svg>`;
+const whatsapp = message => 'https://wa.me/77715371627?text='+encodeURIComponent(message);
+function buildCheckout(items) {
+  const entries=Object.entries(items).filter(([key,qty])=>Object.hasOwn(PRODUCTS,key)&&Number.isInteger(qty)&&qty>0);
+  const assisted=entries.some(([key])=>!PRODUCTS[key].variant);
+  const total=entries.reduce((sum,[key,qty])=>sum+PRODUCTS[key].price*qty,0);
+  if(assisted){
+    const lines=entries.map(([key,qty])=>`${PRODUCTS[key].name} (${PRODUCTS[key].format}) — ${qty} шт. × ${money(PRODUCTS[key].price)} = ${money(PRODUCTS[key].price*qty)}`);
+    return {assisted,total,url:whatsapp(['Здравствуйте! Хочу оформить заказ Ankor:',...lines,`Итого: ${money(total)}. Доставка отдельно.`,`Подтвердите, пожалуйста, наличие и условия доставки.`].join('\n'))};
+  }
+  return {assisted,total,url:entries.length?'https://ankor.life/cart/'+entries.map(([key,qty])=>PRODUCTS[key].variant+':'+qty).join(','):'https://ankor.life/cart'};
+}
 const cartKey = 'ankor-redesign-cart-v1';
 let cart = {};
 try {const saved = JSON.parse(localStorage.getItem(cartKey) || '{}');for(const key of Object.keys(PRODUCTS)){if(Number.isInteger(saved?.[key]) && saved[key]>0) cart[key]=Math.min(saved[key],99);}} catch {cart={};}
@@ -23,7 +36,7 @@ dialogs.forEach(dialog=>{
 
 function showProduct(key) {
   const p=PRODUCTS[key];if(!p)return;
-  document.getElementById('product-dialog-content').innerHTML=`<div class="detail-grid"><div class="detail-image"><img src="${p.image}" alt="${p.alt}"></div><div class="detail-content"><p class="eyebrow">${p.tag}</p><h2 id="detail-title">${p.name}</h2><p class="detail-format">${p.format}</p><p class="detail-description">${p.description}</p><h3>Что внутри</h3><p class="detail-composition">${p.composition}</p><div class="product-bottom"><div class="price">${money(p.price)}</div><button class="button button-primary" data-add="${key}">В корзину ${icon('plus')}</button></div><a class="text-link" href="${p.url}" target="_blank" rel="noopener">Полная информация о продукте ${icon('diagonal')}</a><p class="dialog-footnote">БАД. Не является лекарственным средством. Перед применением ознакомьтесь с инструкцией и проконсультируйтесь со специалистом.</p></div></div>`;
+  document.getElementById('product-dialog-content').innerHTML=`<div class="detail-grid"><div class="detail-image${p.portrait?' detail-image--portrait':''}"><img src="${p.image}" alt="${p.alt}"></div><div class="detail-content"><p class="eyebrow">${p.tag}</p><h2 id="detail-title">${p.name}</h2><p class="detail-format">${p.format}</p><p class="detail-description">${p.description}</p><h3>${p.compositionTitle||'Что внутри'}</h3><p class="detail-composition">${p.composition}</p><div class="product-bottom"><div class="price">${money(p.price)}</div><button class="button button-primary" data-add="${key}">В корзину ${icon('plus')}</button></div><a class="text-link" href="${p.url||whatsapp('Здравствуйте! Расскажите, пожалуйста, подробнее о '+p.name+'.')}" target="_blank" rel="noopener">${p.url?'Полная информация о продукте':'Уточнить состав и применение'} ${icon('diagonal')}</a><p class="dialog-footnote">БАД. Не является лекарственным средством. Перед применением ознакомьтесь с инструкцией и проконсультируйтесь со специалистом.</p></div></div>`;
   showDialog(productDialog);
 }
 function updateCart(){
@@ -37,7 +50,13 @@ function updateCart(){
   else{holder.innerHTML=Object.entries(cart).map(([key,quantity])=>{const p=PRODUCTS[key];return `<article class="cart-item"><img src="${p.image}" alt="${p.name}"><div><h3>${p.name}</h3><p class="cart-item-format">${p.format}</p><span class="cart-item-price">${money(p.price*quantity)}</span><div class="cart-item-actions"><div class="quantity"><button data-quantity="${key}" data-change="-1" aria-label="Уменьшить количество ${p.name}">${icon('minus')}</button><span aria-label="Количество">${quantity}</span><button data-quantity="${key}" data-change="1" ${quantity>=99?'disabled':''} aria-label="Увеличить количество ${p.name}">${icon('plus')}</button></div><button class="remove-item" data-remove="${key}" aria-label="Удалить ${p.name} из корзины">Удалить</button></div></div></article>`;}).join('');}
   document.getElementById('cart-summary').hidden=!count;
   document.getElementById('cart-total').textContent=money(total);
-  document.getElementById('checkout').href=count?'https://ankor.life/cart/'+Object.entries(cart).map(([key,qty])=>PRODUCTS[key].variant+':'+qty).join(','):'https://ankor.life/cart';
+  const order=buildCheckout(cart);
+  const checkout=document.getElementById('checkout');
+  checkout.href=order.url;
+  checkout.textContent=order.assisted?'Заказать в WhatsApp':'Перейти к оформлению';
+  if(order.assisted){checkout.target='_blank';checkout.rel='noopener';}else{checkout.removeAttribute('target');checkout.removeAttribute('rel');}
+  document.querySelector('.checkout-note').textContent=order.assisted?'Список товаров и сумма уже в сообщении. Отправьте его менеджеру.':'Продолжим в официальном магазине ankor.life';
+  document.getElementById('delivery-note').textContent=order.assisted?'Наличие, доставку и оплату подтвердит менеджер.':'Доставка рассчитывается при оформлении.';
   try{localStorage.setItem(cartKey,JSON.stringify(cart));}catch{/* Browsing with storage disabled still supports this session's cart. */}
 }
 function addProduct(key){
